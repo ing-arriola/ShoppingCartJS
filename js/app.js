@@ -15,6 +15,9 @@ function loadListeners(){
 
     //Listener for the emptyCartButton
     emptyCartButton.addEventListener('click',emptyTheEntireCart)
+
+    //When the HTML is loaded, show Local Storage
+    document.addEventListener('DOMContentLoaded',readLocalStorage)
 }
 //Functions
 //This function determines with delegation if the clicked element is a "a" markup with the class "agregar carrito"
@@ -106,4 +109,33 @@ var getCoursesFromLS=()=>{
         coursesLS=JSON.parse(localStorage.getItem('courses'))//Else get all the courses that are in the LS
     }
     return coursesLS//Retrieve data... a empty array or courses, it depends of the state of LS
+}
+
+function readLocalStorage(){
+    let coursesLS
+    //First get courses from Local Storage
+    coursesLS=getCoursesFromLS()
+    //Then ... add to the DOM
+    coursesLS.forEach(element => {
+    const row=document.createElement('tr')//Create a table row element for each course add at the cart
+    //Here is the hmtl structure inside the tr, a detail of the selected course with image, tittle, price and...
+    //... a "X" to delete the course of the cart
+    row.innerHTML=`
+    <td> 
+        <img src="${element.image}" width=100>
+    </td>
+    <td> 
+        ${element.title}
+    </td>
+    <td> 
+        ${element.price}
+    </td>
+    <td> 
+        <a href="#" class="borrar-curso" data-id="${element.image}">X</a>
+    </td>
+    `
+    courseList.appendChild(row)//Finished the structure of the tr, it is added to the courseList in the cart
+    //Save on Local Storage (LS)
+        
+    });
 }
