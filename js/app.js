@@ -63,7 +63,7 @@ const insertIntoCart=(curso)=>{
         ${curso.price}
     </td>
     <td> 
-        <a href="#" class="borrar-curso" data-id="${curso.image}">X</a>
+        <a href="#" class="borrar-curso" data-id="${curso.id}">X</a>
     </td>
     `
     courseList.appendChild(row)//Finished the structure of the tr, it is added to the courseList in the cart
@@ -73,6 +73,7 @@ const insertIntoCart=(curso)=>{
 }
 //This function deletes a course from the cart when the element "X" is clicked 
 function deleteCourse(e) {
+    var courseId, course
     e.preventDefault()//Prevent the default action of the anchor tag
     //Delegation... we must validate that the clicked element has the classlist "borrar-curso"... because it means that the user wants to delete 
     //a course from the cart, after that the targert ups two parentElement to achieve the "tr".. as you can see in insertIntoCart function
@@ -80,6 +81,9 @@ function deleteCourse(e) {
     //that contains that data is the "tr"
     if(e.target.classList.contains('borrar-curso')){
         e.target.parentElement.parentElement.remove()
+        course=e.target.parentElement.parentElement//Get the HTML of the course... i.e. the tr
+        courseId=course.querySelector('a').getAttribute('data-id')//This get the data-id of the td element
+        deleteCourseFromLS(courseId)// call the funcion that deletes the course from LS
     }
 
 }
@@ -131,11 +135,23 @@ function readLocalStorage(){
         ${element.price}
     </td>
     <td> 
-        <a href="#" class="borrar-curso" data-id="${element.image}">X</a>
+        <a href="#" class="borrar-curso" data-id="${element.id}">X</a>
     </td>
     `
     courseList.appendChild(row)//Finished the structure of the tr, it is added to the courseList in the cart
     //Save on Local Storage (LS)
         
     });
+}
+
+//This function get as attribute the Id of the course to be deleted
+var deleteCourseFromLS=(courseId)=>{
+    let coursesLS
+    coursesLS=getCoursesFromLS()//First we need to get the list of courses from the LS
+    coursesLS.forEach((element,index) => {//Second .. iterate in the list 
+        if(element.id===courseId){//Searching for a element in the shooping cart that the user wants to delete
+            coursesLS.splice(index,1)//Delete the element..
+        }
+    });
+    localStorage.setItem('courses',JSON.stringify(coursesLS))//Set the new array in the LS
 }
