@@ -2,6 +2,7 @@
 const cart = document.getElementById('carrito')
 const courses = document.getElementById('lista-cursos')
 const courseList = document.querySelector('#lista-carrito tbody')
+const emptyCartButton=document.getElementById('vaciar-carrito')
 
 //Listeners
 loadListeners()
@@ -11,6 +12,9 @@ function loadListeners(){
     courses.addEventListener('click',buyCourse)
 
     cart.addEventListener('click',deleteCourse)
+
+    //Listener for the emptyCartButton
+    emptyCartButton.addEventListener('click',emptyTheEntireCart)
 }
 //Functions
 //This function determines with delegation if the clicked element is a "a" markup with the class "agregar carrito"
@@ -73,4 +77,13 @@ function deleteCourse(e) {
         e.target.parentElement.parentElement.remove()
     }
 
+}
+//This function deletes all the courses from the cart
+function emptyTheEntireCart (e){
+    e.preventDefault()
+    //While there are elements in the cart... these are removed
+    //Remeber that course list has the entire list of courses added to the cart
+    while(courseList.firstChild){
+        courseList.firstChild.remove()//When the first element is removed, the second will be first, when the second is remove the third will be the first... etc
+    }
 }
