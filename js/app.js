@@ -95,6 +95,7 @@ function emptyTheEntireCart (e){
     while(courseList.firstChild){
         courseList.firstChild.remove()//When the first element is removed, the second will be first, when the second is remove the third will be the first... etc
     }
+    emptyLocalStorage()
 }
 //This arrow function saves the courses in the Local Storage
 var saveCourseOnLS=(course)=>{
@@ -154,4 +155,8 @@ var deleteCourseFromLS=(courseId)=>{
         }
     });
     localStorage.setItem('courses',JSON.stringify(coursesLS))//Set the new array in the LS
+}
+
+var emptyLocalStorage=()=>{
+    localStorage.clear()
 }
