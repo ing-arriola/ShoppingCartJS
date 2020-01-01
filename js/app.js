@@ -51,7 +51,7 @@ const insertIntoCart=(curso)=>{
     //... a "X" to delete the course of the cart
     row.innerHTML=`
     <td> 
-        <img src="${curso.image}">
+        <img src="${curso.image}" width=100>
     </td>
     <td> 
         ${curso.title}
@@ -64,6 +64,8 @@ const insertIntoCart=(curso)=>{
     </td>
     `
     courseList.appendChild(row)//Finished the structure of the tr, it is added to the courseList in the cart
+    //Save on Local Storage (LS)
+    saveCourseOnLS(curso)
 
 }
 //This function deletes a course from the cart when the element "X" is clicked 
@@ -86,4 +88,22 @@ function emptyTheEntireCart (e){
     while(courseList.firstChild){
         courseList.firstChild.remove()//When the first element is removed, the second will be first, when the second is remove the third will be the first... etc
     }
+}
+//This arrow function saves the courses in the Local Storage
+var saveCourseOnLS=(course)=>{
+    //variable to hold the array of objects that getCoursesFromLS retrieves
+    let courses
+    courses=getCoursesFromLS()
+    courses.push(course)//Insert the new course into the LS
+    localStorage.setItem('courses',JSON.stringify(courses))//Save the new array that includes the new course in the LS
+}
+
+var getCoursesFromLS=()=>{
+    let coursesLS//Array to hold the courses or an empty array
+    if(localStorage.getItem('courses')===null){//If the LS is empty in the courses variable... then save a empty array in the coursesLS variable
+        coursesLS=[]
+    }else{
+        coursesLS=JSON.parse(localStorage.getItem('courses'))//Else get all the courses that are in the LS
+    }
+    return coursesLS//Retrieve data... a empty array or courses, it depends of the state of LS
 }
